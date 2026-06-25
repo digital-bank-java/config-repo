@@ -1,0 +1,14 @@
+digital-bank:
+  service:
+    runtime-profile: sit
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: customer-service
+              uri: http://customer-service:8081
+              predicates:
+                - Path=/api/v1/customers/**

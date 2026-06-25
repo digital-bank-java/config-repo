@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+digital-bank:
+  service:
+    name: api-gateway
+    tier: edge
