@@ -8,6 +8,12 @@ spring:
       server:
         webflux:
           routes:
+            - id: customer-service-openapi
+              uri: http://customer-service:8081
+              predicates:
+                - Path=/customer-service/v3/api-docs
+              filters:
+                - RewritePath=/customer-service/(?<segment>.*), /$\{segment}
             - id: customer-service
               uri: http://customer-service:8081
               predicates:
