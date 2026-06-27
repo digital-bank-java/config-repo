@@ -26,12 +26,14 @@ spring:
               predicates:
                 - Path=/admin/docs/customer-service/v3/api-docs
               filters:
+                - PreserveHostHeader
                 - RewritePath=/admin/docs/customer-service/(?<segment>.*), /$\{segment}
             - id: admin-docs-account-service-openapi
               uri: http://account-service:8082
               predicates:
                 - Path=/admin/docs/account-service/v3/api-docs
               filters:
+                - PreserveHostHeader
                 - RewritePath=/admin/docs/account-service/(?<segment>.*), /$\{segment}
             - id: config-server-health
               uri: http://config-server:8888
