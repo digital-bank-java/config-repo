@@ -8,12 +8,30 @@ spring:
       server:
         webflux:
           routes:
+            - id: config-server-health
+              uri: http://config-server:8888
+              predicates:
+                - Path=/config-server/actuator/health
+              filters:
+                - RewritePath=/config-server/(?<segment>.*), /$\{segment}
+            - id: customer-service-health
+              uri: http://customer-service:8081
+              predicates:
+                - Path=/customer-service/actuator/health
+              filters:
+                - RewritePath=/customer-service/(?<segment>.*), /$\{segment}
             - id: customer-service-openapi
               uri: http://customer-service:8081
               predicates:
                 - Path=/customer-service/v3/api-docs
               filters:
                 - RewritePath=/customer-service/(?<segment>.*), /$\{segment}
+            - id: account-service-health
+              uri: http://account-service:8082
+              predicates:
+                - Path=/account-service/actuator/health
+              filters:
+                - RewritePath=/account-service/(?<segment>.*), /$\{segment}
             - id: account-service-customer-accounts
               uri: http://account-service:8082
               predicates:
