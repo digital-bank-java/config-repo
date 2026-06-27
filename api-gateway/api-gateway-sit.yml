@@ -14,10 +14,14 @@ spring:
                 - Path=/customer-service/v3/api-docs
               filters:
                 - RewritePath=/customer-service/(?<segment>.*), /$\{segment}
+            - id: account-service-customer-accounts
+              uri: http://account-service:8082
+              predicates:
+                - Path=/api/v1/customers/*/accounts
             - id: customer-service
               uri: http://customer-service:8081
               predicates:
-                - Path=/api/v1/customers/**
+                - Path=/api/v1/customers,/api/v1/customers/*,/api/v1/customers/*/profile
             - id: account-service-openapi
               uri: http://account-service:8082
               predicates:
@@ -28,7 +32,3 @@ spring:
               uri: http://account-service:8082
               predicates:
                 - Path=/api/v1/accounts/**
-            - id: account-service-customer-accounts
-              uri: http://account-service:8082
-              predicates:
-                - Path=/api/v1/customers/*/accounts
