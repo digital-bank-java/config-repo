@@ -4,7 +4,7 @@ digital-bank:
 
 springdoc:
   api-docs:
-    enabled: false
+    enabled: true
   swagger-ui:
     enabled: true
     path: /admin/docs/swagger-ui.html
