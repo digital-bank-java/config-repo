@@ -59,6 +59,10 @@ spring:
                 - Path=/account-service/actuator/health
               filters:
                 - RewritePath=/account-service/(?<segment>.*), /$\{segment}
+            - id: account-service-admin-accounts
+              uri: http://account-service:8082
+              predicates:
+                - Path=/admin/v1/accounts,/admin/v1/accounts/**
             - id: account-service-customer-accounts
               uri: http://account-service:8082
               predicates:
