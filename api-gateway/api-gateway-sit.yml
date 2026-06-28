@@ -74,7 +74,7 @@ spring:
             - id: customer-service
               uri: http://customer-service:8081
               predicates:
-                - Path=/api/v1/customers,/api/v1/customers/*,/api/v1/customers/*/profile
+                - Path=/api/v1/customers/*,/api/v1/customers/*/profile
             - id: account-service-openapi
               uri: http://account-service:8082
               predicates:
