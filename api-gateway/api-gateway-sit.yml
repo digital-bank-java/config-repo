@@ -63,6 +63,10 @@ spring:
               uri: http://account-service:8082
               predicates:
                 - Path=/admin/v1/accounts,/admin/v1/accounts/**
+            - id: customer-service-admin-customers
+              uri: http://customer-service:8081
+              predicates:
+                - Path=/admin/v1/customers,/admin/v1/customers/**
             - id: account-service-customer-accounts
               uri: http://account-service:8082
               predicates:
