@@ -1,0 +1,12 @@
+server:
+  port: 8083
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: ledger-service
+
+digital-bank:
+  service:
+    name: ledger-service
+    tier: core-banking

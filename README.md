@@ -21,9 +21,18 @@ Credentials, cryptographic keys, tokens, customer information, and other sensiti
 platform-config/
 ├── application.yml
 ├── application-local.yml
-└── customer-service/
-    ├── customer-service.yml
-    └── customer-service-local.yml
+├── account-service/
+│   ├── account-service.yml
+│   └── account-service-sit.yml
+├── api-gateway/
+│   ├── api-gateway.yml
+│   └── api-gateway-sit.yml
+├── customer-service/
+│   ├── customer-service.yml
+│   └── customer-service-local.yml
+└── ledger-service/
+    ├── ledger-service.yml
+    └── ledger-service-sit.yml
 ```
 
 - `application.yml` contains defaults shared by all services.
