@@ -18,7 +18,7 @@ Credentials, cryptographic keys, tokens, customer information, and other sensiti
 ## Repository Structure
 
 ```text
-platform-config/
+config-repo/
 ├── application.yml
 ├── application-local.yml
 ├── account-service/
