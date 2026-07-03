@@ -1,3 +1,9 @@
 digital-bank:
   service:
     runtime-profile: sit
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/ledger_service
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
