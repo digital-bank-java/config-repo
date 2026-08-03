@@ -20,7 +20,7 @@ Credentials, cryptographic keys, tokens, customer information, and other sensiti
 ```text
 config-repo/
 ├── application.yml
-├── application-local.yml
+├── application-sit.yml
 ├── account-service/
 │   ├── account-service.yml
 │   └── account-service-sit.yml
@@ -29,7 +29,7 @@ config-repo/
 │   └── api-gateway-sit.yml
 ├── customer-service/
 │   ├── customer-service.yml
-│   └── customer-service-local.yml
+│   └── customer-service-sit.yml
 └── ledger-service/
     ├── ledger-service.yml
     └── ledger-service-sit.yml
@@ -42,10 +42,10 @@ config-repo/
 
 ## Configuration Precedence
 
-When the same property is defined in multiple files, the more specific source takes precedence. For a request such as `customer-service/local`, the effective order from highest to lowest priority is:
+When the same property is defined in multiple files, the more specific source takes precedence. For a request such as `customer-service/sit`, the effective order from highest to lowest priority is:
 
-1. `customer-service/customer-service-local.yml`
-2. `application-local.yml`
+1. `customer-service/customer-service-sit.yml`
+2. `application-sit.yml`
 3. `customer-service/customer-service.yml`
 4. `application.yml`
 
@@ -55,12 +55,13 @@ This allows shared defaults to remain stable while environments and individual s
 
 | Profile | Purpose |
 | --- | --- |
-| `local` | A service running independently on a developer workstation. |
-| `sit` | The integrated platform running in local Kubernetes. |
+| `sit` | The integrated development and testing environment running in local Docker Desktop Kubernetes. |
 | `uat` | The AWS-hosted user acceptance environment. |
 | `prod` | The AWS-hosted production environment. |
 
-Environment-specific files are added as the corresponding environment becomes available. Production configuration must not reuse local or SIT endpoints or credentials.
+`local` is not a supported deployment environment or Spring profile. A service can run from an IDE for debugging, but it connects to forwarded SIT dependencies and uses the `sit` profile with temporary workstation overrides.
+
+Environment-specific files are added as the corresponding environment becomes available. Production configuration must not reuse SIT endpoints or credentials.
 
 ## Secret Management
 
