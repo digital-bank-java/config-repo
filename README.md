@@ -96,3 +96,16 @@ Before opening a pull request:
 3. Confirm that no secrets or customer data are present.
 4. Verify the affected configuration through Config Server.
 5. Reference the tracked issue using `Closes #<issue-number>` for an issue in this repository, or `Closes <owner>/<repository>#<issue-number>` for an issue in another repository.
+
+## Verification Through Config Server
+
+This repository has no executable artifact. Verify a configuration change through the deployed Config Server after its Git checkout has the intended commit:
+
+```bash
+kubectl port-forward service/config-server 18888:8888 --namespace digital-bank-sit
+curl --fail http://localhost:18888/customer-service/sit
+```
+
+Confirm that the response contains the intended property sources in precedence order. For Customer Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults.
+
+See the organization [README standard](https://github.com/digital-bank-java/.github/blob/main/docs/readme-standard.md) and [platform conventions](https://github.com/digital-bank-java/.github/blob/main/docs/platform-conventions.md) for the shared documentation and naming rules.
