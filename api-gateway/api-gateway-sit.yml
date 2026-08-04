@@ -14,6 +14,8 @@ springdoc:
         url: /admin/docs/customer-service/v3/api-docs
       - name: Account Service
         url: /admin/docs/account-service/v3/api-docs
+      - name: Ledger Service
+        url: /admin/docs/ledger-service/v3/api-docs
 
 spring:
   cloud:
@@ -35,6 +37,13 @@ spring:
               filters:
                 - PreserveHostHeader
                 - RewritePath=/admin/docs/account-service/(?<segment>.*), /$\{segment}
+            - id: admin-docs-ledger-service-openapi
+              uri: http://ledger-service:8083
+              predicates:
+                - Path=/admin/docs/ledger-service/v3/api-docs
+              filters:
+                - PreserveHostHeader
+                - RewritePath=/admin/docs/ledger-service/(?<segment>.*), /$\{segment}
             - id: config-server-health
               uri: http://config-server:8888
               predicates:
