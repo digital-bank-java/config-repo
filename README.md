@@ -31,8 +31,8 @@ config-repo/
 │   ├── customer-service.yml
 │   └── customer-service-sit.yml
 ├── ledger-service/
-    ├── ledger-service.yml
-    └── ledger-service-sit.yml
+│   ├── ledger-service.yml
+│   └── ledger-service-sit.yml
 └── transaction-service/
     ├── transaction-service.yml
     └── transaction-service-sit.yml
