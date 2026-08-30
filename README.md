@@ -30,9 +30,12 @@ config-repo/
 ├── customer-service/
 │   ├── customer-service.yml
 │   └── customer-service-sit.yml
-└── ledger-service/
+├── ledger-service/
     ├── ledger-service.yml
     └── ledger-service-sit.yml
+└── transaction-service/
+    ├── transaction-service.yml
+    └── transaction-service-sit.yml
 ```
 
 - `application.yml` contains defaults shared by all services.
@@ -48,6 +51,9 @@ When the same property is defined in multiple files, the more specific source ta
 2. `application-sit.yml`
 3. `customer-service/customer-service.yml`
 4. `application.yml`
+
+The same convention applies to `transaction-service/sit`; its service default
+defines port `8084`, while its SIT file identifies the active runtime profile.
 
 This allows shared defaults to remain stable while environments and individual services override only the values they need.
 
