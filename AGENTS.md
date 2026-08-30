@@ -35,6 +35,8 @@ This is configuration data, not application code.
 - `ledger-service`
 - `api-gateway`
 - `transaction-service`
+- `auth-service`
+- `mfa-service`
 
 ## Working Rules
 

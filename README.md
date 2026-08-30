@@ -27,15 +27,24 @@ config-repo/
 ├── api-gateway/
 │   ├── api-gateway.yml
 │   └── api-gateway-sit.yml
+├── auth-service/
+│   ├── auth-service.yml
+│   └── auth-service-sit.yml
 ├── customer-service/
 │   ├── customer-service.yml
 │   └── customer-service-sit.yml
 ├── ledger-service/
 │   ├── ledger-service.yml
 │   └── ledger-service-sit.yml
-└── transaction-service/
-    ├── transaction-service.yml
-    └── transaction-service-sit.yml
+├── transaction-service/
+│   ├── transaction-service.yml
+│   └── transaction-service-sit.yml
+├── auth-service/
+│   ├── auth-service.yml
+│   └── auth-service-sit.yml
+└── mfa-service/
+    ├── mfa-service.yml
+    └── mfa-service-sit.yml
 ```
 
 - `application.yml` contains defaults shared by all services.
