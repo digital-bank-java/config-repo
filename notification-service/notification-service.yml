@@ -1,0 +1,11 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: notification-service
+
+digital-bank:
+  service:
+    name: notification-service
+    tier: security
