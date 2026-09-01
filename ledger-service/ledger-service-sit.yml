@@ -15,6 +15,11 @@ spring:
       enable.idempotence: true
 
 ledger:
+  posting:
+    consumer:
+      enabled: true
+      topic: ledger.posting.requested.v1
+      group-id: ledger-service
   outbox:
     delivery:
       enabled: true
