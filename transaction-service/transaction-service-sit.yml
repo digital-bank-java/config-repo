@@ -1,3 +1,19 @@
 digital-bank:
   service:
     runtime-profile: sit
+
+spring:
+  kafka:
+    bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+    properties:
+      security.protocol: PLAINTEXT
+
+transaction:
+  events:
+    reservation:
+      enabled: true
+      sit-plaintext-enabled: true
+      kafka:
+        bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+      security:
+        protocol: PLAINTEXT
