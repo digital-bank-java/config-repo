@@ -3,6 +3,10 @@ digital-bank:
     runtime-profile: sit
 
 spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/transaction_service
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   kafka:
     bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
     properties:
