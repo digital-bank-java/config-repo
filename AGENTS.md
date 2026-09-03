@@ -34,6 +34,7 @@ This is configuration data, not application code.
 - `account-service`
 - `ledger-service`
 - `api-gateway`
+- `transaction-service`
 
 ## Working Rules
 

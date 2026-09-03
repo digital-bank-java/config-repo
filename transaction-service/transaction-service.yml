@@ -1,0 +1,12 @@
+server:
+  port: 8084
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: transaction-service
+
+digital-bank:
+  service:
+    name: transaction-service
+    tier: orchestration
