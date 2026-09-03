@@ -2,6 +2,11 @@ digital-bank:
   service:
     runtime-profile: sit
 
+auth:
+  jwt:
+    issuer: digital-bank-auth
+    secret: ${AUTH_JWT_SECRET:}
+
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/transaction_service
