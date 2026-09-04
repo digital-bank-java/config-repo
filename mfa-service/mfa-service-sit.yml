@@ -1,0 +1,16 @@
+digital-bank:
+  service:
+    runtime-profile: sit
+
+spring:
+  kafka:
+    bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+    properties:
+      security.protocol: PLAINTEXT
+
+mfa:
+  assurance:
+    publisher:
+      enabled: true
+      batch-size: 100
+      poll-interval-ms: 5000
