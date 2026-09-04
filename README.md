@@ -39,9 +39,12 @@ config-repo/
 ├── transaction-service/
 │   ├── transaction-service.yml
 │   └── transaction-service-sit.yml
-└── mfa-service/
-    ├── mfa-service.yml
-    └── mfa-service-sit.yml
+├── mfa-service/
+│   ├── mfa-service.yml
+│   └── mfa-service-sit.yml
+└── notification-service/
+    ├── notification-service.yml
+    └── notification-service-sit.yml
 ```
 
 - `application.yml` contains defaults shared by all services.
@@ -60,6 +63,7 @@ When the same property is defined in multiple files, the more specific source ta
 
 The same convention applies to `transaction-service/sit`; its service default
 defines port `8084`, while its SIT file identifies the active runtime profile.
+The same convention applies to `notification-service/sit`; its service default defines port `8088`, identity `notification-service`, and tier `security`, while its SIT file identifies the active runtime profile.
 
 The shared `auth.jwt.issuer` identifies the local SIT token issuer for services
 that validate Auth Service tokens. Auth Service adds the synthetic SIT scopes
@@ -137,12 +141,30 @@ This repository has no executable artifact. Verify a configuration change throug
 
 ```bash
 kubectl port-forward service/config-server 18888:8888 --namespace digital-bank-sit
+curl --fail http://localhost:18888/notification-service/default
+curl --fail http://localhost:18888/notification-service/sit
+```
+
+Confirm that the responses contain the intended property sources in precedence order. For Notification Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults; the effective configuration must include port `8088`, service identity `notification-service`, tier `security`, and runtime profile `sit`.
+
+After the configuration commit is available to the Config Server checkout, verify the SIT workload with:
+
+```bash
+kubectl rollout status deployment/notification-service --namespace digital-bank-sit --timeout=180s
+kubectl get deployment,pods,service notification-service --namespace digital-bank-sit
+```
 curl --fail http://localhost:18888/customer-service/sit
 curl --fail http://localhost:18888/auth-service/sit
 curl --fail http://localhost:18888/mfa-service/sit
 ```
 
-Confirm that each response contains the intended property sources in precedence order. For Auth Service, the effective SIT configuration must include issuer `digital-bank-auth` and the three synthetic scopes. For MFA Service, the effective configuration must include issuer `digital-bank-auth` and runtime profile `sit`.
+Confirm that each response contains the intended property sources in precedence order. For Auth Service, the effective SIT configuration must include issuer `digital-bank-auth` and the three synthetic scopes. For MFA Service, the effective configuration must include issuer `digital-bank-auth` and runtime profile `sit`. For Notification Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults; the effective configuration must include port `8088`, service identity `notification-service`, tier `security`, and runtime profile `sit`.
+
+After the configuration commit is available to the Config Server checkout, verify the Notification Service workload with:
+
+```bash
+kubectl rollout status deployment/notification-service --namespace digital-bank-sit --timeout=180s
+kubectl get deployment,pods,service notification-service --namespace digital-bank-sit
 
 After the dependent service configuration and application releases are
 available, verify the gateway configuration with:
