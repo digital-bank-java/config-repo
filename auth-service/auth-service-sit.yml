@@ -5,6 +5,7 @@ digital-bank:
 auth:
   jwt:
     scopes:
+      - admin.internal
       - mfa.internal
       - payment.internal
       - transaction.internal
