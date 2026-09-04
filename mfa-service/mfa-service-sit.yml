@@ -1,7 +1,6 @@
 digital-bank:
   service:
     runtime-profile: sit
-
 spring:
   kafka:
     bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092

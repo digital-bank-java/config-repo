@@ -1,3 +1,7 @@
 digital-bank:
   platform:
     name: digital-bank-java
+
+auth:
+  jwt:
+    issuer: digital-bank-auth
