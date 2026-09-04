@@ -68,6 +68,23 @@ fixture credentials remain runtime secrets.
 
 This allows shared defaults to remain stable while environments and individual services override only the values they need.
 
+## SIT API Gateway Surface
+
+The SIT API Gateway is the integration entry point for implemented service
+workflows. Downstream services retain responsibility for authentication and
+authorization; the gateway forwards the caller's `Authorization` header.
+
+| Gateway path | Downstream service | Purpose |
+| --- | --- | --- |
+| `/api/v1/auth/**` | Auth Service | Login and logout |
+| `/api/v1/mfa/**` | MFA Service | Enrollment and challenge workflows |
+| `/internal/v1/transfer-workflows/**` | Transaction Service | Internal transfer workflow |
+| `/internal/v1/payment-instructions/**` | Payment Service | Internal payment instruction lifecycle |
+
+The internal transfer and payment paths are not public business APIs. They are
+available through the authenticated SIT gateway for service integration and
+verification only.
+
 ## Environment Model
 
 | Profile | Purpose |
@@ -126,5 +143,21 @@ curl --fail http://localhost:18888/mfa-service/sit
 ```
 
 Confirm that each response contains the intended property sources in precedence order. For Auth Service, the effective SIT configuration must include issuer `digital-bank-auth` and the three synthetic scopes. For MFA Service, the effective configuration must include issuer `digital-bank-auth` and runtime profile `sit`.
+
+After the dependent service configuration and application releases are
+available, verify the gateway configuration with:
+
+```bash
+curl --fail http://localhost:8080/auth-service/actuator/health
+curl --fail http://localhost:8080/mfa-service/actuator/health
+curl --fail http://localhost:8080/transaction-service/actuator/health
+curl --fail http://localhost:8080/payment-service/actuator/health
+curl --fail http://localhost:8080/v3/api-docs/swagger-config
+```
+
+The centralized Swagger response must include the Auth, MFA, Transaction, and
+Payment definitions after their services are deployed. A missing downstream
+service should affect only its own route and must not make unrelated gateway
+routes unavailable.
 
 See the organization [README standard](https://github.com/digital-bank-java/.github/blob/main/docs/readme-standard.md) and [platform conventions](https://github.com/digital-bank-java/.github/blob/main/docs/platform-conventions.md) for the shared documentation and naming rules.
