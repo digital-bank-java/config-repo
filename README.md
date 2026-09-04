@@ -40,8 +40,8 @@ config-repo/
 │   ├── transaction-service.yml
 │   └── transaction-service-sit.yml
 ├── mfa-service/
-    ├── mfa-service.yml
-    └── mfa-service-sit.yml
+│   ├── mfa-service.yml
+│   └── mfa-service-sit.yml
 └── notification-service/
     ├── notification-service.yml
     └── notification-service-sit.yml
