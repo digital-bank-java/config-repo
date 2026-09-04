@@ -3,6 +3,11 @@ digital-bank:
     runtime-profile: sit
 
 gateway:
+  rate-limit:
+    public:
+      replenish-rate: 10
+      burst-capacity: 20
+      requested-tokens: 1
   resilience:
     retry:
       retries: 2
@@ -34,6 +39,10 @@ springdoc:
         url: /admin/docs/ledger-service/v3/api-docs
 
 spring:
+  data:
+    redis:
+      host: redis
+      port: 6379
   cloud:
     gateway:
       server:
@@ -96,10 +105,24 @@ spring:
               uri: http://account-service:8082
               predicates:
                 - Path=/api/v1/customers/*/accounts
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@rateLimitKeyResolver}"
+                    redis-rate-limiter.replenishRate: ${gateway.rate-limit.public.replenish-rate}
+                    redis-rate-limiter.burstCapacity: ${gateway.rate-limit.public.burst-capacity}
+                    redis-rate-limiter.requestedTokens: ${gateway.rate-limit.public.requested-tokens}
             - id: customer-service
               uri: http://customer-service:8081
               predicates:
                 - Path=/api/v1/customers/*,/api/v1/customers/*/profile
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@rateLimitKeyResolver}"
+                    redis-rate-limiter.replenishRate: ${gateway.rate-limit.public.replenish-rate}
+                    redis-rate-limiter.burstCapacity: ${gateway.rate-limit.public.burst-capacity}
+                    redis-rate-limiter.requestedTokens: ${gateway.rate-limit.public.requested-tokens}
             - id: account-service-openapi
               uri: http://account-service:8082
               predicates:
@@ -110,3 +133,10 @@ spring:
               uri: http://account-service:8082
               predicates:
                 - Path=/api/v1/accounts/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    key-resolver: "#{@rateLimitKeyResolver}"
+                    redis-rate-limiter.replenishRate: ${gateway.rate-limit.public.replenish-rate}
+                    redis-rate-limiter.burstCapacity: ${gateway.rate-limit.public.burst-capacity}
+                    redis-rate-limiter.requestedTokens: ${gateway.rate-limit.public.requested-tokens}
