@@ -8,4 +8,7 @@ auth:
       - admin.internal
       - mfa.internal
       - payment.internal
-      - transaction.internal
+      - transfer.internal
+  identity:
+    fixture:
+      username: transfer-orchestrator

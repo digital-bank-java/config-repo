@@ -70,7 +70,7 @@ The same convention applies to `notification-service/sit`; its service default d
 
 The shared `auth.jwt.issuer` identifies the local SIT token issuer for services
 that validate Auth Service tokens. Auth Service adds the synthetic SIT scopes
-`mfa.internal`, `payment.internal`, and `transaction.internal`; signing keys and
+`mfa.internal`, `payment.internal`, and `transfer.internal`; signing keys and
 fixture credentials remain runtime secrets.
 
 This allows shared defaults to remain stable while environments and individual services override only the values they need.
