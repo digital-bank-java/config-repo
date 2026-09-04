@@ -1,3 +1,10 @@
 digital-bank:
   service:
     runtime-profile: sit
+
+auth:
+  jwt:
+    scopes:
+      - mfa.internal
+      - payment.internal
+      - transaction.internal
