@@ -2,6 +2,10 @@ digital-bank:
   service:
     runtime-profile: sit
 
+gateway:
+  security:
+    enabled: true
+
 springdoc:
   api-docs:
     enabled: true
