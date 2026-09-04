@@ -27,15 +27,21 @@ config-repo/
 ├── api-gateway/
 │   ├── api-gateway.yml
 │   └── api-gateway-sit.yml
+├── auth-service/
+│   ├── auth-service.yml
+│   └── auth-service-sit.yml
 ├── customer-service/
 │   ├── customer-service.yml
 │   └── customer-service-sit.yml
 ├── ledger-service/
 │   ├── ledger-service.yml
 │   └── ledger-service-sit.yml
-└── transaction-service/
-    ├── transaction-service.yml
-    └── transaction-service-sit.yml
+├── transaction-service/
+│   ├── transaction-service.yml
+│   └── transaction-service-sit.yml
+└── mfa-service/
+    ├── mfa-service.yml
+    └── mfa-service-sit.yml
 ```
 
 - `application.yml` contains defaults shared by all services.
@@ -54,6 +60,11 @@ When the same property is defined in multiple files, the more specific source ta
 
 The same convention applies to `transaction-service/sit`; its service default
 defines port `8084`, while its SIT file identifies the active runtime profile.
+
+The shared `auth.jwt.issuer` identifies the local SIT token issuer for services
+that validate Auth Service tokens. Auth Service adds the synthetic SIT scopes
+`mfa.internal`, `payment.internal`, and `transaction.internal`; signing keys and
+fixture credentials remain runtime secrets.
 
 This allows shared defaults to remain stable while environments and individual services override only the values they need.
 
@@ -127,9 +138,11 @@ This repository has no executable artifact. Verify a configuration change throug
 ```bash
 kubectl port-forward service/config-server 18888:8888 --namespace digital-bank-sit
 curl --fail http://localhost:18888/customer-service/sit
+curl --fail http://localhost:18888/auth-service/sit
+curl --fail http://localhost:18888/mfa-service/sit
 ```
 
-Confirm that the response contains the intended property sources in precedence order. For Customer Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults.
+Confirm that each response contains the intended property sources in precedence order. For Auth Service, the effective SIT configuration must include issuer `digital-bank-auth` and the three synthetic scopes. For MFA Service, the effective configuration must include issuer `digital-bank-auth` and runtime profile `sit`.
 
 After the dependent service configuration and application releases are
 available, verify the gateway configuration with:
