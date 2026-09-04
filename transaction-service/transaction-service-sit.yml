@@ -26,6 +26,28 @@ transaction:
         bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
       security:
         protocol: PLAINTEXT
+    ledger:
+      enabled: true
+      requested-topic: ledger.posting.requested.v1
+      completed-topic: ledger.posting.completed.v1
+      failed-topic: ledger.posting.failed.v1
+      consumer:
+        group-id: transaction-service-ledger
+        retry:
+          max-attempts: 3
+          initial-interval-ms: 1000
+          multiplier: 2.0
+          max-interval-ms: 10000
+      publisher:
+        fixed-delay-ms: 1000
+        lease-seconds: 900
+        send-timeout-seconds: 10
+        retry-delay-ms: 5000
+      kafka:
+        bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+      security:
+        protocol: PLAINTEXT
+      sit-plaintext-enabled: true
     mfa-assurance:
       enabled: true
       topic: mfa.assurance.granted.v1

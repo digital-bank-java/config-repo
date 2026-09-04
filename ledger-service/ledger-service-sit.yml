@@ -7,3 +7,25 @@ spring:
     url: jdbc:postgresql://postgres:5432/ledger_service
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  kafka:
+    bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+    properties:
+      security.protocol: PLAINTEXT
+      acks: all
+      enable.idempotence: true
+
+ledger:
+  posting:
+    consumer:
+      enabled: true
+      topic: ledger.posting.requested.v1
+      group-id: ledger-service
+  outbox:
+    delivery:
+      enabled: true
+      batch-size: 5
+      lease-duration: 5m
+      retry-delay: 5s
+      poll-delay: 5s
+      publish-timeout: 10s
+      max-attempts: 5
