@@ -18,6 +18,9 @@ spring:
       security.protocol: PLAINTEXT
 
 transaction:
+  transfer:
+    authorization:
+      allowed-subjects: transfer-orchestrator
   events:
     reservation:
       enabled: true
