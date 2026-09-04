@@ -26,3 +26,18 @@ transaction:
         bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
       security:
         protocol: PLAINTEXT
+    mfa-assurance:
+      enabled: true
+      topic: mfa.assurance.granted.v1
+      consumer:
+        group-id: transaction-service-mfa-assurance
+        retry:
+          max-attempts: 3
+          initial-interval-ms: 1000
+          multiplier: 2.0
+          max-interval-ms: 10000
+      kafka:
+        bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+      security:
+        protocol: PLAINTEXT
+      sit-plaintext-enabled: true
