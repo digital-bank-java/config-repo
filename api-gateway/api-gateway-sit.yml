@@ -16,6 +16,14 @@ springdoc:
         url: /admin/docs/account-service/v3/api-docs
       - name: Ledger Service
         url: /admin/docs/ledger-service/v3/api-docs
+      - name: Auth Service
+        url: /admin/docs/auth-service/v3/api-docs
+      - name: MFA Service
+        url: /admin/docs/mfa-service/v3/api-docs
+      - name: Transaction Service
+        url: /admin/docs/transaction-service/v3/api-docs
+      - name: Payment Service
+        url: /admin/docs/payment-service/v3/api-docs
 
 spring:
   cloud:
@@ -44,6 +52,34 @@ spring:
               filters:
                 - PreserveHostHeader
                 - RewritePath=/admin/docs/ledger-service/(?<segment>.*), /$\{segment}
+            - id: admin-docs-auth-service-openapi
+              uri: http://auth-service:8086
+              predicates:
+                - Path=/admin/docs/auth-service/v3/api-docs
+              filters:
+                - PreserveHostHeader
+                - RewritePath=/admin/docs/auth-service/(?<segment>.*), /$\{segment}
+            - id: admin-docs-mfa-service-openapi
+              uri: http://mfa-service:8087
+              predicates:
+                - Path=/admin/docs/mfa-service/v3/api-docs
+              filters:
+                - PreserveHostHeader
+                - RewritePath=/admin/docs/mfa-service/(?<segment>.*), /$\{segment}
+            - id: admin-docs-transaction-service-openapi
+              uri: http://transaction-service:8084
+              predicates:
+                - Path=/admin/docs/transaction-service/v3/api-docs
+              filters:
+                - PreserveHostHeader
+                - RewritePath=/admin/docs/transaction-service/(?<segment>.*), /$\{segment}
+            - id: admin-docs-payment-service-openapi
+              uri: http://payment-service:8085
+              predicates:
+                - Path=/admin/docs/payment-service/v3/api-docs
+              filters:
+                - PreserveHostHeader
+                - RewritePath=/admin/docs/payment-service/(?<segment>.*), /$\{segment}
             - id: config-server-health
               uri: http://config-server:8888
               predicates:
@@ -68,6 +104,46 @@ spring:
                 - Path=/account-service/actuator/health
               filters:
                 - RewritePath=/account-service/(?<segment>.*), /$\{segment}
+            - id: auth-service-health
+              uri: http://auth-service:8086
+              predicates:
+                - Path=/auth-service/actuator/health
+              filters:
+                - RewritePath=/auth-service/(?<segment>.*), /$\{segment}
+            - id: mfa-service-health
+              uri: http://mfa-service:8087
+              predicates:
+                - Path=/mfa-service/actuator/health
+              filters:
+                - RewritePath=/mfa-service/(?<segment>.*), /$\{segment}
+            - id: transaction-service-health
+              uri: http://transaction-service:8084
+              predicates:
+                - Path=/transaction-service/actuator/health
+              filters:
+                - RewritePath=/transaction-service/(?<segment>.*), /$\{segment}
+            - id: payment-service-health
+              uri: http://payment-service:8085
+              predicates:
+                - Path=/payment-service/actuator/health
+              filters:
+                - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
+            - id: auth-service
+              uri: http://auth-service:8086
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: mfa-service
+              uri: http://mfa-service:8087
+              predicates:
+                - Path=/api/v1/mfa/**
+            - id: transaction-service-transfer-workflows
+              uri: http://transaction-service:8084
+              predicates:
+                - Path=/internal/v1/transfer-workflows,/internal/v1/transfer-workflows/**
+            - id: payment-service-instructions
+              uri: http://payment-service:8085
+              predicates:
+                - Path=/internal/v1/payment-instructions,/internal/v1/payment-instructions/**
             - id: account-service-admin-accounts
               uri: http://account-service:8082
               predicates:
