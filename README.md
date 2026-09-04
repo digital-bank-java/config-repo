@@ -42,9 +42,12 @@ config-repo/
 ├── mfa-service/
 │   ├── mfa-service.yml
 │   └── mfa-service-sit.yml
-└── notification-service/
-    ├── notification-service.yml
-    └── notification-service-sit.yml
+├── notification-service/
+│   ├── notification-service.yml
+│   └── notification-service-sit.yml
+└── payment-service/
+    ├── payment-service.yml
+    └── payment-service-sit.yml
 ```
 
 - `application.yml` contains defaults shared by all services.
@@ -146,6 +149,15 @@ curl --fail http://localhost:18888/notification-service/sit
 ```
 
 Confirm that the responses contain the intended property sources in precedence order. For Notification Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults; the effective configuration must include port `8088`, service identity `notification-service`, tier `security`, and runtime profile `sit`.
+
+For Payment Service SIT configuration, verify the corresponding lookups:
+
+```bash
+curl --fail http://localhost:18888/payment-service/default
+curl --fail http://localhost:18888/payment-service/sit
+```
+
+The `payment-service/sit` response is expected to include `payment-service/payment-service-sit.yml`, `application-sit.yml`, `payment-service/payment-service.yml`, and `application.yml`. The effective configuration must include port `8085`, service identity `payment-service`, tier `payments`, and runtime profile `sit`.
 
 After the configuration commit is available to the Config Server checkout, verify the SIT workload with:
 

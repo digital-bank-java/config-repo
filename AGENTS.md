@@ -38,6 +38,7 @@ This is configuration data, not application code.
 - `auth-service`
 - `mfa-service`
 - `notification-service`
+- `payment-service`
 
 ## Working Rules
 

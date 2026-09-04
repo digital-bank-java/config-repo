@@ -1,0 +1,12 @@
+server:
+  port: 8085
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: payment-service
+
+digital-bank:
+  service:
+    name: payment-service
+    tier: payments
