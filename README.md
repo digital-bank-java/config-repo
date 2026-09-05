@@ -92,6 +92,29 @@ The internal transfer and payment paths are not public business APIs. They are
 available through the authenticated SIT gateway for service integration and
 verification only.
 
+## API Gateway Resilience In SIT
+
+The `api-gateway/api-gateway-sit.yml` file externalizes the non-secret SIT
+resilience policy consumed by API Gateway:
+
+- Retry up to two times for `GET`, `HEAD`, and `OPTIONS` requests only.
+- Retry only on `5xx` and gateway-timeout responses, with bounded exponential
+  backoff.
+- Use a 1-second connection timeout and a 2-second downstream response timeout.
+- Apply a per-route circuit breaker with a count-based window of 20 calls,
+  opening at a 50% failure rate after at least 5 calls.
+- Permit two calls during half-open recovery and transition automatically.
+
+Mutation methods such as `POST`, `PUT`, `PATCH`, and `DELETE` are excluded from
+automatic retries to avoid replaying non-idempotent business operations. The
+policy is configuration-only; credentials, tokens, and production endpoints do
+not belong in this repository.
+
+The gateway resilience implementation and its focused integration coverage live
+in the API Gateway repository. After changing these values, refresh or restart
+Config Server and roll out API Gateway in SIT. Verify that an unavailable
+downstream route is isolated and that unrelated routes remain available.
+
 ## Environment Model
 
 | Profile | Purpose |
@@ -140,48 +163,43 @@ Before opening a pull request:
 
 ## Verification Through Config Server
 
-This repository has no executable artifact. Verify a configuration change through the deployed Config Server after its Git checkout has the intended commit:
+This repository has no executable artifact. Verify configuration through the
+deployed Config Server after its Git checkout has the intended commit:
 
 ```bash
 kubectl port-forward service/config-server 18888:8888 --namespace digital-bank-sit
 curl --fail http://localhost:18888/notification-service/default
 curl --fail http://localhost:18888/notification-service/sit
-```
-
-Confirm that the responses contain the intended property sources in precedence order. For Notification Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults; the effective configuration must include port `8088`, service identity `notification-service`, tier `security`, and runtime profile `sit`.
-
-For Payment Service SIT configuration, verify the corresponding lookups:
-
-```bash
 curl --fail http://localhost:18888/payment-service/default
 curl --fail http://localhost:18888/payment-service/sit
-```
-
-The `payment-service/sit` response is expected to include `payment-service/payment-service-sit.yml`, `application-sit.yml`, `payment-service/payment-service.yml`, and `application.yml`. The effective configuration must include port `8085`, service identity `payment-service`, tier `payments`, and runtime profile `sit`.
-
-After the configuration commit is available to the Config Server checkout, verify the SIT workload with:
-
-```bash
-kubectl rollout status deployment/notification-service --namespace digital-bank-sit --timeout=180s
-kubectl get deployment,pods,service notification-service --namespace digital-bank-sit
-```
 curl --fail http://localhost:18888/customer-service/sit
 curl --fail http://localhost:18888/auth-service/sit
 curl --fail http://localhost:18888/mfa-service/sit
 ```
 
-Confirm that each response contains the intended property sources in precedence order. For Auth Service, the effective SIT configuration must include issuer `digital-bank-auth` and the three synthetic scopes. For MFA Service, the effective configuration must include issuer `digital-bank-auth` and runtime profile `sit`. For Notification Service SIT configuration, the expected order is service SIT overrides, shared SIT overrides, service defaults, then shared defaults; the effective configuration must include port `8088`, service identity `notification-service`, tier `security`, and runtime profile `sit`.
+Confirm that each response contains the intended property sources in
+precedence order. For Payment Service, the SIT response must include the
+service SIT override, `application-sit.yml`, the service default, and
+`application.yml`; the effective configuration must include port `8085`,
+service identity `payment-service`, tier `payments`, and runtime profile `sit`.
+For Auth Service, verify issuer `digital-bank-auth` and the synthetic SIT
+scopes. For MFA Service, verify issuer `digital-bank-auth` and runtime profile
+`sit`.
 
-After the configuration commit is available to the Config Server checkout, verify the Notification Service workload with:
+After the configuration commit is available to the Config Server checkout,
+verify the affected SIT workloads:
 
 ```bash
+kubectl rollout status deployment/api-gateway --namespace digital-bank-sit --timeout=180s
 kubectl rollout status deployment/notification-service --namespace digital-bank-sit --timeout=180s
-kubectl get deployment,pods,service notification-service --namespace digital-bank-sit
+kubectl get deployment,pods,service api-gateway notification-service --namespace digital-bank-sit
+```
 
-After the dependent service configuration and application releases are
-available, verify the gateway configuration with:
+Verify the gateway routes and centralized documentation through the API Gateway
+port-forward:
 
 ```bash
+curl --fail http://localhost:8080/actuator/health
 curl --fail http://localhost:8080/auth-service/actuator/health
 curl --fail http://localhost:8080/mfa-service/actuator/health
 curl --fail http://localhost:8080/transaction-service/actuator/health
@@ -189,9 +207,7 @@ curl --fail http://localhost:8080/payment-service/actuator/health
 curl --fail http://localhost:8080/v3/api-docs/swagger-config
 ```
 
-The centralized Swagger response must include the Auth, MFA, Transaction, and
-Payment definitions after their services are deployed. A missing downstream
-service should affect only its own route and must not make unrelated gateway
-routes unavailable.
+A missing downstream service should affect only its own route and must not make
+unrelated gateway routes unavailable.
 
-See the organization [README standard](https://github.com/digital-bank-java/.github/blob/main/docs/readme-standard.md) and [platform conventions](https://github.com/digital-bank-java/.github/blob/main/docs/platform-conventions.md) for the shared documentation and naming rules.
+See the organization [README standard](https://github.com/digital-bank-java/.github/blob/main/docs/readme-standard.md) and [platform conventions](https://github.com/digital-bank-java/.github/blob/main/docs/platform-conventions.md) for shared documentation and naming rules.
