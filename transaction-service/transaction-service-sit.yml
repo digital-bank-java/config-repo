@@ -24,6 +24,24 @@ transaction:
   events:
     reservation:
       enabled: true
+      requested-topic: account.reservation.requested.v1
+      release-requested-topic: account.reservation.release-requested.v1
+      accepted-topic: account.reservation.accepted.v1
+      rejected-topic: account.reservation.rejected.v1
+      released-topic: account.reservation.released.v1
+      expired-topic: account.reservation.expired.v1
+      consumer:
+        group-id: transaction-service-reservation-v1
+        retry:
+          max-attempts: 3
+          initial-interval-ms: 1000
+          multiplier: 2.0
+          max-interval-ms: 10000
+      publisher:
+        fixed-delay-ms: 1000
+        lease-seconds: 900
+        send-timeout-seconds: 10
+        retry-delay-ms: 5000
       sit-plaintext-enabled: true
       kafka:
         bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
