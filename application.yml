@@ -2,6 +2,10 @@ digital-bank:
   platform:
     name: digital-bank-java
 
+management:
+  tracing:
+    enabled: false
+
 auth:
   jwt:
     issuer: digital-bank-auth

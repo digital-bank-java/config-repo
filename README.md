@@ -75,6 +75,20 @@ fixture credentials remain runtime secrets.
 
 This allows shared defaults to remain stable while environments and individual services override only the values they need.
 
+## SIT Distributed Tracing
+
+The shared SIT profile enables Micrometer tracing for services that include the managed
+Spring Boot Zipkin starter. Spans are sent to the internal `zipkin` ClusterIP service:
+
+```text
+http://zipkin.digital-bank-sit.svc.cluster.local:9411/api/v2/spans
+```
+
+SIT samples every request so a controlled local verification is deterministic. The base
+configuration disables tracing, and UAT/PROD exporters must be configured explicitly when
+the AWS observability design is implemented. Trace and span IDs remain observability data;
+they must not be added to business request or event payloads.
+
 ## SIT API Gateway Surface
 
 The SIT API Gateway is the integration entry point for implemented service
