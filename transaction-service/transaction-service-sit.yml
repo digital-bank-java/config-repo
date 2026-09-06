@@ -69,6 +69,15 @@ transaction:
       security:
         protocol: PLAINTEXT
       sit-plaintext-enabled: true
+    transfer-terminal:
+      enabled: true
+      completed-topic: events.transfer.completed.v1
+      failed-topic: events.transfer.failed.v1
+      publisher:
+        fixed-delay-ms: 1000
+        lease-seconds: 900
+        send-timeout-seconds: 10
+        retry-delay-ms: 5000
     mfa-assurance:
       enabled: true
       topic: mfa.assurance.granted.v1
