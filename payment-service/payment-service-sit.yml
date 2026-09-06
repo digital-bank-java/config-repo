@@ -1,3 +1,13 @@
 digital-bank:
   service:
     runtime-profile: sit
+
+spring:
+  kafka:
+    bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
+    properties:
+      security.protocol: PLAINTEXT
+
+payment:
+  events:
+    topic: payment.instruction.state.v1
