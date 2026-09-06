@@ -3,6 +3,11 @@ digital-bank:
     environment: sit
     region: local
 
+logging:
+  structured:
+    format:
+      console: ecs
+
 management:
   tracing:
     enabled: true
