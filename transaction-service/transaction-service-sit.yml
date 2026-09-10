@@ -21,6 +21,11 @@ transaction:
   transfer:
     authorization:
       allowed-subjects: transfer-orchestrator
+  risk:
+    policy-version: transfer-risk-policy-2026-09-sit
+    decision-ttl: PT5M
+    high-value-thresholds:
+      AED: 500.0000
   events:
     reservation:
       enabled: true
