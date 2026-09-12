@@ -4,6 +4,14 @@ digital-bank:
 
 auth:
   jwt:
+    audiences:
+      - api-gateway
+      - customer-service
+      - account-service
+      - ledger-service
+      - transaction-service
+      - payment-service
+      - mfa-service
     scopes:
       - admin.internal
       - mfa.internal

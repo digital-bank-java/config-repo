@@ -1,6 +1,11 @@
 digital-bank:
   service:
     runtime-profile: sit
+
+auth:
+  jwt:
+    audience: mfa-service
+
 spring:
   kafka:
     bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092

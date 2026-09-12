@@ -9,3 +9,4 @@ management:
 auth:
   jwt:
     issuer: digital-bank-auth
+    token-purpose: user-access
