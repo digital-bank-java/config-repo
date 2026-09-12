@@ -52,16 +52,6 @@ transaction:
         bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
       security:
         protocol: PLAINTEXT
-    mfa-assurance:
-      enabled: true
-      topic: mfa.assurance.granted.v1
-      consumer:
-        group-id: transaction-service-mfa-assurance
-      kafka:
-        bootstrap-servers: kafka.digital-bank-sit.svc.cluster.local:9092
-      security:
-        protocol: PLAINTEXT
-      sit-plaintext-enabled: true
     ledger:
       enabled: true
       requested-topic: ledger.posting.requested.v1
