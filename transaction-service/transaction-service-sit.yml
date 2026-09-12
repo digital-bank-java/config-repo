@@ -6,6 +6,7 @@ auth:
   jwt:
     issuer: digital-bank-auth
     secret: ${AUTH_JWT_SECRET:}
+    audience: transaction-service
 
 spring:
   datasource:
